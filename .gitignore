@@ -1,0 +1,73 @@
+# =========================
+# Keil5 / STM32 工程忽略规则
+# =========================
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# STM32CubeIDE / Eclipse files
+.project
+.cproject
+.settings/
+.mxproject
+
+# Keil user files
+*.uvguix.*
+*.uvgui.*
+*.bak
+*.tmp
+*.uvoptx
+
+# Build output files
+*.axf
+*.abs
+*.bin
+*.hex
+*.elf
+*.map
+*.lib
+*.lnp
+*.lst
+*.o
+*.obj
+*.d
+*.dep
+*.crf
+*.tra
+*.plg
+*.iex
+*.i
+*.ii
+*.htm
+*.html
+*.log
+
+# Build folders
+Debug/
+Release/
+Objects/
+Listings/
+
+# Keil build subfolders
+MDK-ARM/Debug/
+MDK-ARM/Release/
+MDK-ARM/Objects/
+MDK-ARM/Listings/
+
+# ARM folders if present
+ARM/Debug/
+ARM/Release/
+ARM/Objects/
+ARM/Listings/
+
+# RTE temp
+RTE/_Target_*/
+*.gpdsc
+
+# Python cache
+__pycache__/
+*.pyc

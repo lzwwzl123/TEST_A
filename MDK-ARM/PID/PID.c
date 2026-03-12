@@ -8,7 +8,6 @@ static inline float clampf(float v, float lo, float hi) {
     return v;
 }
 
-/* 对称“绝对值限幅” */
 static inline float clamp_abs(float v, float abs_limit) {
     if (abs_limit <= 0.0f) return v;
     if (v >  abs_limit) return  abs_limit;

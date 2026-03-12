@@ -228,7 +228,7 @@ int main(void)
          LED_GPIO_Port, LED_Pin,
          node_ids);
 	{
-  /* 用你的实测/标定值替换下面四个数（单位：米） */
+  /* 用你的实测/标定值替换下面四个数 * /
   const float L0[4] = { 0.33662331f, 0.33662331f, 0.33662331f, 0.33662331f };
   IK_CDPR_SetL0(L0);
 }

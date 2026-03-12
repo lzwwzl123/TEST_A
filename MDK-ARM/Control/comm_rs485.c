@@ -40,8 +40,13 @@ static bool CommBus_TrySendTo(CommBus_t *bus, int idx){
 
     // 准备发送内容：把节点地址写入 cmd，并通过协议层完成编码/校验/打包
     bus->nodes[idx].cmd.id = bus->nodes[idx].id;
-	  bus->nodes[idx].cmd.K_P  = KP_MOTOR;
+#if APP_CTRL_MODE == APP_CTRL_MODE_TORQUE
+    bus->nodes[idx].cmd.K_P  = 0.0f;
+    bus->nodes[idx].cmd.K_W  = 0.0f;
+#else
+    bus->nodes[idx].cmd.K_P  = KP_MOTOR;
     bus->nodes[idx].cmd.K_W  = KD_MOTOR;
+#endif
     modify_data(&bus->nodes[idx].cmd);                   // >>> 协议层：填充 motor_send_data 字节流 <<<
 
     // 先切 Tx、置 LED=SET（如将该脚并到 DE，则同时完成方向切换）
@@ -90,8 +95,13 @@ void CommBus_Init(CommBus_t *bus,
         MotorCmd_t *cmd = &bus->nodes[i].cmd;
         cmd->id   = bus->nodes[i].id;
         cmd->mode = 1;                                    
+        #if APP_CTRL_MODE == APP_CTRL_MODE_TORQUE
+        cmd->K_P  = 0.0f;
+        cmd->K_W  = 0.0f;
+        #else
         cmd->K_P  = KP_MOTOR;
-        cmd->K_W  = KD_MOTOR;                                 
+        cmd->K_W  = KD_MOTOR;
+        #endif
         cmd->Pos  = 0.0f;
         cmd->W    = 0.0f;
         cmd->T    = 0.0f;

@@ -364,7 +364,7 @@ void App_MainLoop(App_t *app)
  * ------------------------------------------------------------------------------------------------*/
 void App_Tick(App_t *app)
 {
-	
+    float torque_cmd[APP_MOTORS] = {0};
 
     if (app->motion_state == MOTION_RUNNING) {
         if (app->motor_len < 2 || app->points_duration <= 0) {
@@ -382,6 +382,13 @@ void App_Tick(App_t *app)
                 float p1 = app->motor_kp[m][app->flag + 1];
                 app->pos_set_rel[m] = p0 + (p1 - p0) * progress;
             }
+#if APP_CTRL_MODE == APP_CTRL_MODE_TORQUE
+            for (int m = 0; m < APP_MOTORS; m++) {
+                float t0 = app->motor_torque[m][app->flag];
+                float t1 = app->motor_torque[m][app->flag + 1];
+                torque_cmd[m] = t0 + (t1 - t0) * progress;
+            }
+#endif
 
             app->count++;
             if (app->count >= app->points_duration){
@@ -429,14 +436,25 @@ void App_Tick(App_t *app)
 		}
 		
     // 控制：设置目标并对所有轴执行一次控制 Tick，输出 vel_out（单位视控制层/底层约定）
+#if APP_CTRL_MODE == APP_CTRL_MODE_TORQUE
+    // 力控模式：不做位置→速度闭环
+    (void)app;
+#else
     Control_SetTargets(&app->ctl, app->pos_set_rel);
     Control_TickAll(&app->ctl, app->pos_meas_rel, app->vel_out);
+#endif
 
     // 下发：把控制输出写入到通信层命令缓存（例如速度/转速通道），然后尝试轮询发送
     for (int i = 0; i < APP_MOTORS; i++){
-			
-            CommBus_GetCmd(&app->bus, i)->W = app->vel_out[i];
-						CommBus_GetCmd(&app->bus, i)->Pos = app->pos_set_rel[i] + app->zero_off[i];
+#if APP_CTRL_MODE == APP_CTRL_MODE_TORQUE
+        CommBus_GetCmd(&app->bus, i)->T   = torque_cmd[i];
+        CommBus_GetCmd(&app->bus, i)->W   = 0.0f;
+        CommBus_GetCmd(&app->bus, i)->Pos = 0.0f;
+#else
+        CommBus_GetCmd(&app->bus, i)->T   = 0.0f;
+        CommBus_GetCmd(&app->bus, i)->W   = app->vel_out[i];
+        CommBus_GetCmd(&app->bus, i)->Pos = app->pos_set_rel[i] + app->zero_off[i];
+#endif
 
     }
     (void)CommBus_TryStepRoundRobin(&app->bus);

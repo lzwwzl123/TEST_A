@@ -36,7 +36,19 @@
 #define KD_MOTOR										0.25f
 
 
+#ifndef M_PI
 #define M_PI												3.1415926535897f
+#endif
+
+/* =========================
+ * 控制模式选择
+ * =========================
+ * - APP_CTRL_MODE_POSVEL: 位置闭环输出速度命令（下发 W/Pos）
+ * - APP_CTRL_MODE_TORQUE: 力控模式仅下发 T（W/Pos/KP/KD 置 0）
+ */
+#define APP_CTRL_MODE_POSVEL         0
+#define APP_CTRL_MODE_TORQUE         1
+#define APP_CTRL_MODE                APP_CTRL_MODE_POSVEL
 
 
 #endif // APP_CONFIG_H

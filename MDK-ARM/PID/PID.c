@@ -1,7 +1,6 @@
 #include "PID.h"
 #include <math.h>
 
-/* 简单夹紧函数 */
 static inline float clampf(float v, float lo, float hi) {
     if (v < lo) return lo;
     if (v > hi) return hi;

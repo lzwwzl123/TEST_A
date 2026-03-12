@@ -117,7 +117,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){ CommBus_OnTxCplt(&g_app
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){ CommBus_OnRxCplt(&g_app.bus, huart); }
 void HAL_UART_ErrorCallback (UART_HandleTypeDef *huart){ CommBus_OnError (&g_app.bus, huart); }
 
-/* TIM2 4kHz：执行本周期控制（段内插值→相对零位PID→下发） */
+/* TIM2 4kHz：执行本周期控制 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == TIM2) {
@@ -228,7 +228,7 @@ int main(void)
          LED_GPIO_Port, LED_Pin,
          node_ids);
 	{
-  /* 用你的实测/标定值替换下面四个数 * /
+  /* 用你的实测/标定值替换下面四个数 */
   const float L0[4] = { 0.33662331f, 0.33662331f, 0.33662331f, 0.33662331f };
   IK_CDPR_SetL0(L0);
 }
@@ -321,8 +321,7 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB buses clocks
   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK|RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;

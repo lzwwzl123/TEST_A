@@ -436,7 +436,7 @@ void App_Tick(App_t *app)
     for (int i = 0; i < APP_MOTORS; i++){
 			
             CommBus_GetCmd(&app->bus, i)->W = app->vel_out[i];
-						CommBus_GetCmd(&app->bus, i)->Pos = app->pos_set_rel[i] + app->zero_off[i];
+			CommBus_GetCmd(&app->bus, i)->Pos = app->pos_set_rel[i] + app->zero_off[i];
 
     }
     (void)CommBus_TryStepRoundRobin(&app->bus);
